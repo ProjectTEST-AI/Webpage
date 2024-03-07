@@ -228,11 +228,10 @@
             updatePosition();
             hero.appendChild(dot);
 
-            setTimeout(() => dot.remove(), 20000);
         }
 
         for (let i = 0; i < numDots; i++) {
-            setTimeout(createDot, i * 100);
+            setTimeout(createDot, i * 200);
         }
     });
         </script>                 
