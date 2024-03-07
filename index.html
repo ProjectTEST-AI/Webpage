@@ -218,8 +218,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const baseSize = 10; // Base size for dot at z=1
         const size = baseSize * z / 10; // Size increases with depth
         const dot = {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
+            x: (Math.random() + 20) * (canvas.width - 20),
+            y: (Math.random() + 20) * (canvas.height - 20),
             z: z,
             velX: (Math.random() - 0.5) * 2,
             velY: (Math.random() - 0.5) * 2,
