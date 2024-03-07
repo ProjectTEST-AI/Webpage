@@ -49,13 +49,42 @@
             color: #f90;
         }
 
-        /* Hero Section */
+        .button, nav ul li a {
+        position: relative; /* Needed to apply z-index */
+        z-index: 2; /* Higher z-index to keep these elements above the dots */
+        }
+
+        .hero h1, .hero p {
+        position: relative;
+        z-index: 3; /* Ensure this is higher than the z-index for .dot */
+        }
+
+        /* Ensures buttons are also above the dots */
+        .button {
+            position: relative;
+            z-index: 3; /* Matches the z-index of text to ensure it's on top */
+        }
+
         .hero {
-          background-image: url('images/Background.png');
-          background-size: cover;
-          background-position: center;
-          padding: 100px 0;
-          text-align: center;
+            position: relative; /* Needed for absolute positioning of dots within */
+            overflow: hidden; /* Prevents dots from overflowing the hero container */
+            padding: 150px 0; /* Existing padding, adjust as needed */
+            text-align: center; /* Existing text alignment */
+        }
+
+        /* Style for the dots */
+        .dot {
+            position: absolute;
+            border-radius: 50%;
+            /* Initial color is set in JavaScript */
+            /* Use multiple box shadows to create layers for the tail effect */
+            box-shadow: 
+            0 0 5px rgba(255, 255, 255, 0.9),
+            0 0 10px rgba(255, 255, 255, 0.7),
+            0 0 15px rgba(255, 255, 255, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.3),
+            0 0 25px rgba(255, 255, 255, 0.1);
+            transition: background-color 2s, box-shadow 2s; /* Slow transition for color and shadow */
         }
         .hero h1 {
             font-size: 60px;
@@ -71,6 +100,7 @@
         /* Buttons */
         .button {
             display: inline-block;
+            z-index: 1;
             padding: 10px 30px;
             font-size: 18px;
             color: #000;
@@ -154,5 +184,57 @@
         <p>&copy; 2024 Project TEST. All rights reserved.</p>
         <p>Join our community on <a href="https://discord.com/invite/z6eCvSHuVY" style="color: #f90;">Discord</a>.</p>
     </footer>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const hero = document.querySelector('.hero');
+        const numDots = 50; // Number of dots you want to show
+
+        function randomColor() {
+            return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
+        }
+
+        function createDot() {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.width = dot.style.height = `${Math.random() * 5 + 2}px`;
+
+            let posX = Math.random() * hero.offsetWidth;
+            let posY = Math.random() * hero.offsetHeight;
+            let velX = (Math.random() - 0.5) * 2;
+            let velY = (Math.random() - 0.5) * 2;
+            let color = randomColor();
+            dot.style.backgroundColor = color;
+
+            // Color change interval
+            setInterval(() => {
+                color = randomColor();
+                dot.style.backgroundColor = color;
+                dot.style.boxShadow = `0 0 15px 10px ${color}`; // Shadow size increased for tail effect
+            }, 2000); // Slow down the color change rate
+
+            function updatePosition() {
+                posX += velX;
+                posY += velY;
+
+                if (posX <= 0 || posX >= hero.offsetWidth) velX *= -1;
+                if (posY <= 0 || posY >= hero.offsetHeight) velY *= -1;
+
+                dot.style.left = `${posX}px`;
+                dot.style.top = `${posY}px`;
+
+                requestAnimationFrame(updatePosition);
+            }
+
+            updatePosition();
+            hero.appendChild(dot);
+
+            setTimeout(() => dot.remove(), 20000);
+        }
+
+        for (let i = 0; i < numDots; i++) {
+            setTimeout(createDot, i * 100);
+        }
+    });
+        </script>                 
 </body>
 </html>
