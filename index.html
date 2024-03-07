@@ -17,14 +17,14 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #000;
-            color: #fff;
+            color: #dddddd;
             line-height: 2.3;
         }
 
         /* Navigation Styles */
         nav {
-            background: #333;
-            color: #fff;
+            background: #0c0c0c;
+            color: #dfdfdf;
             padding: 10px 20px;
             text-align: center;
         }
@@ -40,7 +40,7 @@
 
         nav ul li a {
             text-decoration: none;
-            color: #fff;
+            color: #f3f3f3;
             font-size: 18px;
             text-transform: uppercase;
         }
@@ -112,7 +112,7 @@
             padding: 10px 30px;
             font-size: 18px;
             color: #000;
-            background-color: rgb(19, 16, 175);
+            background-color: rgb(14, 66, 197);
             border: none;
             border-radius: 5px;
             text-transform: uppercase;
@@ -136,7 +136,7 @@
         /* Content Sections */
         .content-section {
             padding: 40px 0;
-            border-bottom: 1px solid #303030;
+            border-bottom: 1px solid #222020;
         }
 
         .content-section h2 {
@@ -153,7 +153,7 @@
 
         /* Footer */
         footer {
-            background: #333;
+            background: #0c0c0c;
             color: #fff;
             text-align: center;
             padding: 20px 0;
@@ -196,7 +196,7 @@
 
     <footer>
         <p>&copy; 2024 Project TEST. All rights reserved.</p>
-        <p>Join our community on <a href="https://discord.com/invite/z6eCvSHuVY" style="color: #f90;">Discord</a>.</p>
+        <p>Join our community on <a href="https://discord.com/invite/z6eCvSHuVY" style="color: #107ad7;">Discord</a>.</p>
     </footer>
     <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (dot.z <= minZ || dot.z >= maxZ) {
             dot.velZ *= -1; // Reverse direction if it goes beyond min or max z
         }
-        dot.size = 10 * dot.z / 10; // Update size based on new z position for 3D effect
+        dot.size = 8 * dot.z / 8; // Update size based on new z position for 3D effect
     }
 
     function updateConnections() {
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Bounce off the edges
             if (dot.x <= 0 || dot.x >= canvas.width) dot.velX *= -1;
-            if (dot.y <= 0 || dot.y >= canvas.height) dot.velY *= -1;
+            if (dot.y <= 0 || dot.y >= (canvas.height-20)) dot.velY *= -1;
         });
 
         // Draw connections, considering new z positions
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const dot1 = dots[i];
                 const dot2 = dots[j];
                 const distance = Math.sqrt((dot1.x - dot2.x) ** 2 + (dot1.y - dot2.y) ** 2);
-                const maxDistance = 600; // Connection visibility range
+                const maxDistance = 500; // Connection visibility range
                 if (distance < maxDistance) {
                     const opacity = Math.min(dot1.z, dot2.z) / 20;
                     ctx.strokeStyle = `rgba(255, 255, 255, ${opacity - distance / maxDistance})`;
