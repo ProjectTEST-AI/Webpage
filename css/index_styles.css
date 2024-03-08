@@ -74,7 +74,7 @@ z-index: 3; /* Ensure this is higher than the z-index for .dot */
 /* Adjust font size and padding for smaller screens (e.g., below 425px) */
 @media screen and (max-width: 426px) {
     .hero-content {
-      padding: 10px 0;
+      padding: 50px 0;
       font-size: 0.5rem;
     }
   }
