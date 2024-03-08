@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
             dot.x += dot.velX;
             dot.y += dot.velY;
 
-            // Bounce off the edges 
+            // Bounce off the edges
             if (dot.x <= 20 || dot.x >= (canvas.width-20)) dot.velX *= -1;
             if (dot.y <= 20 || dot.y >= (canvas.height-20)) dot.velY *= -1;
         });
