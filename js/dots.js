@@ -45,8 +45,8 @@ document.addEventListener("DOMContentLoaded", function() {
             size: size
 
             // Move dot away from edge of canvas
-            if (x <= 20) x = 21;
-            if (y <= 20) y = 21;
+            if (x <= 20) {x = 21};
+            if (y <= 20) {y = 21};
         };
         dots.push(dot);
     }
