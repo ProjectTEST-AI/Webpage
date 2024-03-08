@@ -58,10 +58,41 @@ z-index: 3; /* Ensure this is higher than the z-index for .dot */
 }
 
 .hero {
-    position: relative; /* Needed for absolute positioning of dots within */
-    overflow: hidden; /* Prevents dots from overflowing the hero container */
-    padding: 150px 0; /* Existing padding, adjust as needed */
-    text-align: center; /* Existing text alignment */
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  --aspect-ratio: 2;
+  height: 0;
+  padding-bottom: calc(100% / var(--aspect-ratio));
+}
+
+.hero-content {
+  padding: 150px 0;
+  font-size: 2rem;
+}
+
+/* Adjust font size and padding for smaller screens (e.g., below 425px) */
+@media screen and (max-width: 426px) {
+    .hero-content {
+      padding: 10px 0;
+      font-size: 0.5rem;
+    }
+  }
+
+/* Adjust font size and padding for smaller screens (e.g., below 768px) */
+@media screen and (max-width: 767px) {
+  .hero-content {
+    padding: 100px 0;
+    font-size: 1.5rem;
+  }
+}
+
+/* Adjust font size and padding for larger screens (e.g., above 1200px) */
+@media screen and (min-width: 1200px) {
+  .hero-content {
+    padding: 200px 0;
+    font-size: 2.5rem;
+  }
 }
 
 /* Style for the dots */
