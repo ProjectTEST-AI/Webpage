@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", function() {
         const size = baseSize * z / 10; // Size increases with depth
         const MinX = 
         const dot = {
-            x: Math.random() * (canvas.width - 40) + 40,
-            y: Math.random() * (canvas.height - 40) + 40,
+            x: Math.random() * (canvas.width - 20),
+            y: Math.random() * (canvas.height - 20),
             z: z,
             velX: (Math.random() - 0.5) * 2,
             velY: (Math.random() - 0.5) * 2,
