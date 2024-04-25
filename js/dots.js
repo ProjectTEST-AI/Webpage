@@ -34,9 +34,10 @@ document.addEventListener("DOMContentLoaded", function() {
         const velZ = (Math.random() - 0.5) * 0.2; // Velocity along the z-axis for dynamic depth
         const baseSize = 10; // Base size for dot at z=1
         const size = baseSize * z / 10; // Size increases with depth
+        const MinX = 
         const dot = {
-            x: Math.random() * (canvas.width - 20),
-            y: Math.random() * (canvas.height - 20),
+            x: Math.random() * (canvas.width - 20) + 20,
+            y: Math.random() * (canvas.height - 20) + 20,
             z: z,
             velX: (Math.random() - 0.5) * 2,
             velY: (Math.random() - 0.5) * 2,
