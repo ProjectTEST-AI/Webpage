@@ -23,111 +23,176 @@ document.addEventListener("DOMContentLoaded", function() {
     canvas.width = hero.offsetWidth;
     canvas.height = hero.offsetHeight;
 
-    let dots = []; // Array to store dot objects with position, velocity, color, size, and z-axis movement
+    const neurons = [];
+    const dataPackets = [];
+    const neuronCount = 100;
+    let connectionDistance, maxConnections;
+    const connectionLifespan = 500;
+    const animationSpeed = 0.0005;
+    const colors = ['#00ff00', '#00ffff', '#0080ff', '#8000ff', '#ff00ff'];
 
-    function randomColor() {
-        return `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)}, ${Math.floor(Math.random() * 256)})`;
-    }
-
-    function createDot() {
-        const z = Math.random() * 20 + 1; // Initial simulated depth
-        const velZ = (Math.random() - 0.5) * 0.2; // Velocity along the z-axis for dynamic depth
-        const baseSize = 10; // Base size for dot at z=1
-        const size = baseSize * z / 10; // Size increases with depth
-        const dot = {
-            x: Math.random() * (canvas.width - 40) + 20,
-            y: Math.random() * (canvas.height - 40) + 20,
-            z: z,
-            velX: (Math.random() - 0.5) * 2,
-            velY: (Math.random() - 0.5) * 2,
-            velZ: velZ,
-            color: randomColor(),
-            size: size
-        };
-        dots.push(dot);
-    }
-
-    function updateDotZ(dot) {
-        dot.z += dot.velZ;
-        const minZ = 1, maxZ = 20;
-        if (dot.z <= minZ || dot.z >= maxZ) {
-            dot.velZ *= -1; // Reverse direction if it goes beyond min or max z
+    function updateConnectionParams() {
+        // Adjust connection parameters based on canvas width
+        if (canvas.width < 600) {
+            connectionDistance = 80;
+            maxConnections = 3;
+        } else if (canvas.width < 1200) {
+            connectionDistance = 100;
+            maxConnections = 5;
+        } else {
+            connectionDistance = 120;
+            maxConnections = 7;
         }
-        dot.size = 8 * dot.z / 8; // Update size based on new z position for 3D effect
+    }
+
+    updateConnectionParams();
+
+    // Create neurons
+    for (let i = 0; i < neuronCount; i++) {
+        neurons.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            connections: [],
+            color: colors[Math.floor(Math.random() * colors.length)]
+        });
     }
 
     function updateConnections() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas for redrawing
+        for (const neuron of neurons) {
+            // Remove old connections
+            neuron.connections = neuron.connections.filter(conn => conn.age < connectionLifespan);
 
-        // Draw and update positions of dots, with simulated 3D effects including z-axis movement
-        dots.forEach(dot => {
-            updateDotZ(dot); // Update dot's z position for dynamic depth effect
+            // Add new connections if needed
+            if (neuron.connections.length < maxConnections) {
+                const nearbyNeurons = neurons
+                    .filter(n => n !== neuron)
+                    .map(n => ({
+                        neuron: n,
+                        distance: Math.sqrt((n.x - neuron.x) ** 2 + (n.y - neuron.y) ** 2)
+                    }))
+                    .sort((a, b) => a.distance - b.distance)
+                    .slice(0, maxConnections - neuron.connections.length);
 
-            const opacity = dot.z / 20; // Adjust opacity based on depth
-            ctx.fillStyle = `rgba(${dot.color.match(/\d+/g).join(',')},${opacity})`;
-            ctx.shadowColor = `rgba(0, 0, 255, ${opacity / 2})`;
-            ctx.shadowBlur = dot.size / 2;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-
-            const lightSize = dot.size * 1.5; // Increase size for a larger light effect
-            const gradient = ctx.createRadialGradient(dot.x, dot.y, 0, dot.x, dot.y, lightSize / 2);
-            gradient.addColorStop(0, 'rgba(255, 255, 255, 1)'); // Bright center
-            gradient.addColorStop(1, `rgba(${dot.color.match(/\d+/g).join(',')}, 0)`); // Fading to transparent color
-
-            ctx.beginPath();
-            ctx.moveTo(dot.x - lightSize / 2, dot.y - lightSize / 2);
-            ctx.lineTo(dot.x + lightSize / 2, dot.y - lightSize / 2);
-            ctx.lineTo(dot.x + lightSize / 2, dot.y + lightSize / 2);
-            ctx.lineTo(dot.x - lightSize / 2, dot.y + lightSize / 2);
-            ctx.closePath();
-            ctx.fillStyle = gradient;
-            ctx.shadowBlur = lightSize / 4; // Add a slight blur effect
-            ctx.shadowColor = `rgba(${dot.color.match(/\d+/g).join(',')}, 1)`;
-            ctx.fill();
-            ctx.shadowBlur = 0; // Reset blur effect
-
-            ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-
-            dot.x += dot.velX;
-            dot.y += dot.velY;
-
-            // Bounce off the edges
-            if (dot.x <= 20 || dot.x >= (canvas.width-20)) dot.velX *= -1;
-            if (dot.y <= 20 || dot.y >= (canvas.height-20)) dot.velY *= -1;
-        });
-
-        // Draw connections, considering new z positions
-        for (let i = 0; i < dots.length; i++) {
-            for (let j = i + 1; j < dots.length; j++) {
-                const dot1 = dots[i];
-                const dot2 = dots[j];
-                const distance = Math.sqrt((dot1.x - dot2.x) ** 2 + (dot1.y - dot2.y) ** 2);
-                const maxDistance = 500; // Connection visibility range
-                if (distance < maxDistance) {
-                    const opacity = Math.min(dot1.z, dot2.z) / 20;
-                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity - distance / maxDistance})`;
-                    ctx.beginPath();
-                    ctx.moveTo(dot1.x, dot1.y);
-                    ctx.lineTo(dot2.x, dot2.y);
-                    ctx.stroke();
+                for (const nearby of nearbyNeurons) {
+                    if (nearby.distance < connectionDistance) {
+                        neuron.connections.push({ neuron: nearby.neuron, age: 0 });
+                    }
                 }
+            }
+
+            // Age existing connections
+            for (const conn of neuron.connections) {
+                conn.age++;
             }
         }
     }
 
+    function createDataPacket(start, end) {
+        return {
+            startX: start.x,
+            startY: start.y,
+            endX: end.x,
+            endY: end.y,
+            progress: 0,
+            color: start.color
+        };
+    }
+
+    let time = 0;
+
     function animate() {
-        updateConnections(); // Draw dots and update connections based on proximity
-        requestAnimationFrame(animate); // Loop the animation
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        time += animationSpeed;
+
+        updateConnections();
+
+        // Draw connections
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgba(0, 255, 255, 0.5)';
+        for (const neuron of neurons) {
+            for (const conn of neuron.connections) {
+                const opacity = 1 - conn.age / connectionLifespan;
+                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(neuron.x, neuron.y);
+                ctx.lineTo(conn.neuron.x, conn.neuron.y);
+                ctx.stroke();
+            }
+        }
+
+        // Draw and update neurons
+        ctx.shadowBlur = 10;
+        for (const neuron of neurons) {
+            ctx.beginPath();
+            ctx.fillStyle = neuron.color;
+            ctx.arc(neuron.x, neuron.y, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add glow effect
+            ctx.beginPath();
+            const gradient = ctx.createRadialGradient(neuron.x, neuron.y, 0, neuron.x, neuron.y, 8);
+            gradient.addColorStop(0, neuron.color);
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = gradient;
+            ctx.arc(neuron.x, neuron.y, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Move neurons in a circular pattern
+            neuron.x += Math.cos(time) * 0.2;
+            neuron.y += Math.sin(time) * 0.2;
+
+            // Wrap around edges
+            neuron.x = (neuron.x + canvas.width) % canvas.width;
+            neuron.y = (neuron.y + canvas.height) % canvas.height;
+
+            // Randomly send data packets
+            if (Math.random() < 0.001 && neuron.connections.length > 0) {
+                const targetConnection = neuron.connections[Math.floor(Math.random() * neuron.connections.length)];
+                dataPackets.push(createDataPacket(neuron, targetConnection.neuron));
+            }
+        }
+
+        // Update and draw data packets
+        ctx.shadowBlur = 15;
+        for (let i = dataPackets.length - 1; i >= 0; i--) {
+            const packet = dataPackets[i];
+            packet.progress += 0.005;
+
+            if (packet.progress >= 1) {
+                dataPackets.splice(i, 1);
+                continue;
+            }
+
+            const x = packet.startX + (packet.endX - packet.startX) * packet.progress;
+            const y = packet.startY + (packet.endY - packet.startY) * packet.progress;
+
+            ctx.beginPath();
+            ctx.fillStyle = packet.color;
+            ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add glow effect to data packets
+            ctx.beginPath();
+            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 5);
+            gradient.addColorStop(0, packet.color);
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = gradient;
+            ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        requestAnimationFrame(animate);
     }
 
-    // Create dots
-    for (let i = 0; i < 50; i++) { // Adjust number of dots as needed
-        createDot();
+    animate();
+
+    // Resize handler
+    function handleResize() {
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+        updateConnectionParams();
     }
 
-    animate(); // Start the animation loop
+    window.addEventListener('resize', handleResize);
 });
