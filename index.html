@@ -21,7 +21,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Project TEST - Home</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
@@ -30,12 +30,15 @@
 
 <body>
     <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Our Projects</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+        <div class="nav-container">
+            <button class="menu-toggle" aria-label="Toggle menu" id="menuToggle">☰</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="projects.html">Our Projects</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
     </nav>
 
     <div class="hero">
@@ -43,8 +46,10 @@
         <div class="hero-content">
             <h1>Welcome to Project TEST</h1>
             <p>Collaborative Software Development for the Future.</p>
-            <a href="about.html" class="button">Learn More</a>
-            <a href="projects.html" class="button">View Projects</a>
+            <div class="button-container">
+                <a href="about.html" class="button">Learn More</a>
+                <a href="projects.html" class="button">View Projects</a>
+            </div>
         </div>
     </div>
 
@@ -68,6 +73,23 @@
     </footer>
 
     <script src="js/dots.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+
+            menuToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                    navMenu.classList.remove('show');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

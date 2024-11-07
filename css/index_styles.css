@@ -23,6 +23,13 @@
     box-sizing: border-box;
 }
 
+/* Mobile-first approach */
+:root {
+    --primary-color: #10A2D7;
+    --text-color: #dddddd;
+    --bg-color: #000;
+}
+
 /* General Styles */
 body {
     font-family: Arial, sans-serif;
@@ -37,6 +44,24 @@ nav {
     color: #dfdfdf;
     padding: 10px 20px;
     text-align: center;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+    position: relative;
+    width: 100%;
+    z-index: 1000;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 24px;
+    cursor: pointer;
 }
 
 nav ul {
@@ -87,6 +112,17 @@ z-index: 3; /* Ensure this is higher than the z-index for .dot */
 .hero-content {
   padding: 150px 0;
   font-size: 2rem;
+  padding: 40px 20px;
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
 }
 
 /* Adjust font size and padding for smaller screens (e.g., below 425px) */
@@ -159,6 +195,9 @@ z-index: 3; /* Ensure this is higher than the z-index for .dot */
     text-transform: uppercase;
     text-decoration: none;
     transition: background-color 0.3s ease;
+    min-width: 140px;
+    text-align: center;
+    margin: 5px;
 }
 
 .button:hover {
@@ -243,5 +282,96 @@ footer {
 
     .content-section p {
         font-size: 1rem;
+    }
+}
+
+/* Media Queries */
+@media screen and (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        background: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+        z-index: 1001;
+    }
+
+    .nav-menu {
+        display: none;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: var(--bg-color);
+        padding: 4rem 1rem 2rem;
+        height: auto;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-menu.active {
+        display: block;
+    }
+
+    .nav-menu.show {
+        display: flex;
+    }
+
+    .nav-menu li {
+        margin: 0.5rem 0;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 10px 0;
+    }
+
+    .hero-content h1 {
+        font-size: 32px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+    }
+
+    .button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .nav-menu {
+        display: flex !important;
+        justify-content: center;
+        gap: 2rem;
+        list-style: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .content-section {
+        padding: 20px;
+    }
+
+    .hero-content {
+        padding: 20px 10px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    p {
+        font-size: 16px;
     }
 }

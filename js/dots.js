@@ -20,179 +20,129 @@ document.addEventListener("DOMContentLoaded", function() {
     const hero = document.querySelector('.hero');
     const canvas = document.getElementById('nnCanvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = hero.offsetWidth;
-    canvas.height = hero.offsetHeight;
+    
+    // Performance optimizations
+    let rafId;
+    let lastTime = 0;
+    const FPS = 60;
+    const frameDelay = 1000 / FPS;
 
+    // Neural network parameters
     const neurons = [];
-    const dataPackets = [];
-    const neuronCount = 100;
-    let connectionDistance, maxConnections;
-    const connectionLifespan = 500;
-    const animationSpeed = 0.0005;
-    const colors = ['#00ff00', '#00ffff', '#0080ff', '#8000ff', '#ff00ff'];
+    const synapses = new Set();
+    const neuronCount = 50; // Reduced for better performance
+    const maxConnections = 3;
+    const connectionDistance = 150;
+    const colors = ['#4CAF50', '#03A9F4', '#3F51B5', '#9C27B0', '#E91E63'];
 
-    function updateConnectionParams() {
-        // Adjust connection parameters based on canvas width
-        if (canvas.width < 600) {
-            connectionDistance = 80;
-            maxConnections = 3;
-        } else if (canvas.width < 1200) {
-            connectionDistance = 100;
-            maxConnections = 5;
-        } else {
-            connectionDistance = 120;
-            maxConnections = 7;
+    // Initialize canvas
+    function initCanvas() {
+        canvas.width = hero.offsetWidth;
+        canvas.height = hero.offsetHeight;
+        createNeurons();
+    }
+
+    function createNeurons() {
+        neurons.length = 0;
+        synapses.clear();
+
+        for (let i = 0; i < neuronCount; i++) {
+            neurons.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                color: colors[Math.floor(Math.random() * colors.length)],
+                active: Math.random() > 0.5
+            });
         }
     }
 
-    updateConnectionParams();
+    function updateNeurons(deltaTime) {
+        neurons.forEach(neuron => {
+            // Update position with smooth movement
+            neuron.x += neuron.vx * deltaTime;
+            neuron.y += neuron.vy * deltaTime;
 
-    // Create neurons
-    for (let i = 0; i < neuronCount; i++) {
-        neurons.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            connections: [],
-            color: colors[Math.floor(Math.random() * colors.length)]
+            // Bounce off edges
+            if (neuron.x < 0 || neuron.x > canvas.width) neuron.vx *= -1;
+            if (neuron.y < 0 || neuron.y > canvas.height) neuron.vy *= -1;
+
+            // Randomly activate neurons
+            if (Math.random() < 0.001) neuron.active = !neuron.active;
         });
     }
 
-    function updateConnections() {
-        for (const neuron of neurons) {
-            // Remove old connections
-            neuron.connections = neuron.connections.filter(conn => conn.age < connectionLifespan);
+    function drawNetwork() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw synapses
+        ctx.lineWidth = 0.5;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
 
-            // Add new connections if needed
-            if (neuron.connections.length < maxConnections) {
-                const nearbyNeurons = neurons
-                    .filter(n => n !== neuron)
-                    .map(n => ({
-                        neuron: n,
-                        distance: Math.sqrt((n.x - neuron.x) ** 2 + (n.y - neuron.y) ** 2)
-                    }))
-                    .sort((a, b) => a.distance - b.distance)
-                    .slice(0, maxConnections - neuron.connections.length);
+        neurons.forEach((neuron, i) => {
+            neurons.slice(i + 1).forEach(other => {
+                const dx = other.x - neuron.x;
+                const dy = other.y - neuron.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                for (const nearby of nearbyNeurons) {
-                    if (nearby.distance < connectionDistance) {
-                        neuron.connections.push({ neuron: nearby.neuron, age: 0 });
+                if (distance < connectionDistance) {
+                    const opacity = Math.max(0, 1 - (distance / connectionDistance));
+                    ctx.strokeStyle = `rgba(255, 255, 255, ${opacity * 0.2})`;
+                    ctx.beginPath();
+                    ctx.moveTo(neuron.x, neuron.y);
+                    ctx.lineTo(other.x, other.y);
+                    ctx.stroke();
+
+                    // Draw activation pulse if either neuron is active
+                    if (neuron.active || other.active) {
+                        const gradient = ctx.createLinearGradient(
+                            neuron.x, neuron.y, other.x, other.y
+                        );
+                        gradient.addColorStop(0, `${neuron.color}44`);
+                        gradient.addColorStop(1, `${other.color}44`);
+                        ctx.strokeStyle = gradient;
+                        ctx.stroke();
                     }
                 }
-            }
+            });
+        });
 
-            // Age existing connections
-            for (const conn of neuron.connections) {
-                conn.age++;
-            }
-        }
+        // Draw neurons
+        neurons.forEach(neuron => {
+            ctx.beginPath();
+            ctx.fillStyle = neuron.active ? neuron.color : `${neuron.color}88`;
+            ctx.shadowBlur = neuron.active ? 15 : 5;
+            ctx.shadowColor = neuron.color;
+            ctx.arc(neuron.x, neuron.y, neuron.active ? 3 : 2, 0, Math.PI * 2);
+            ctx.fill();
+        });
     }
 
-    function createDataPacket(start, end) {
-        return {
-            startX: start.x,
-            startY: start.y,
-            endX: end.x,
-            endY: end.y,
-            progress: 0,
-            color: start.color
-        };
+    function animate(currentTime) {
+        rafId = requestAnimationFrame(animate);
+        
+        const deltaTime = currentTime - lastTime;
+        if (deltaTime < frameDelay) return;
+        
+        lastTime = currentTime;
+        updateNeurons(deltaTime * 0.1);
+        drawNetwork();
     }
 
-    let time = 0;
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        time += animationSpeed;
-
-        updateConnections();
-
-        // Draw connections
-        ctx.shadowBlur = 5;
-        ctx.shadowColor = 'rgba(0, 255, 255, 0.5)';
-        for (const neuron of neurons) {
-            for (const conn of neuron.connections) {
-                const opacity = 1 - conn.age / connectionLifespan;
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath();
-                ctx.moveTo(neuron.x, neuron.y);
-                ctx.lineTo(conn.neuron.x, conn.neuron.y);
-                ctx.stroke();
-            }
-        }
-
-        // Draw and update neurons
-        ctx.shadowBlur = 10;
-        for (const neuron of neurons) {
-            ctx.beginPath();
-            ctx.fillStyle = neuron.color;
-            ctx.arc(neuron.x, neuron.y, 2, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Add glow effect
-            ctx.beginPath();
-            const gradient = ctx.createRadialGradient(neuron.x, neuron.y, 0, neuron.x, neuron.y, 8);
-            gradient.addColorStop(0, neuron.color);
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = gradient;
-            ctx.arc(neuron.x, neuron.y, 8, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Move neurons in a circular pattern
-            neuron.x += Math.cos(time) * 0.2;
-            neuron.y += Math.sin(time) * 0.2;
-
-            // Wrap around edges
-            neuron.x = (neuron.x + canvas.width) % canvas.width;
-            neuron.y = (neuron.y + canvas.height) % canvas.height;
-
-            // Randomly send data packets
-            if (Math.random() < 0.001 && neuron.connections.length > 0) {
-                const targetConnection = neuron.connections[Math.floor(Math.random() * neuron.connections.length)];
-                dataPackets.push(createDataPacket(neuron, targetConnection.neuron));
-            }
-        }
-
-        // Update and draw data packets
-        ctx.shadowBlur = 15;
-        for (let i = dataPackets.length - 1; i >= 0; i--) {
-            const packet = dataPackets[i];
-            packet.progress += 0.005;
-
-            if (packet.progress >= 1) {
-                dataPackets.splice(i, 1);
-                continue;
-            }
-
-            const x = packet.startX + (packet.endX - packet.startX) * packet.progress;
-            const y = packet.startY + (packet.endY - packet.startY) * packet.progress;
-
-            ctx.beginPath();
-            ctx.fillStyle = packet.color;
-            ctx.arc(x, y, 1.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Add glow effect to data packets
-            ctx.beginPath();
-            const gradient = ctx.createRadialGradient(x, y, 0, x, y, 5);
-            gradient.addColorStop(0, packet.color);
-            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = gradient;
-            ctx.arc(x, y, 5, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    // Resize handler
+    // Handle resize
     function handleResize() {
-        canvas.width = hero.offsetWidth;
-        canvas.height = hero.offsetHeight;
-        updateConnectionParams();
+        initCanvas();
     }
 
     window.addEventListener('resize', handleResize);
+    initCanvas();
+    animate(0);
+
+    // Cleanup
+    return () => {
+        cancelAnimationFrame(rafId);
+        window.removeEventListener('resize', handleResize);
+    };
 });
