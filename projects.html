@@ -21,48 +21,264 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Projects - Project TEST</title>
-    <link href="css/projects_styles.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/projects_styles.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="projects.html">Our Projects</a></li>
-            <li><a href="about.html">About Us</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
-    </nav>
+    <header class="header" id="header">
+        <div class="container">
+            <div class="nav-container">
+                <a href="index.html" class="logo">Project<span>TEST</span></a>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">Our Projects</h1>
+            <p class="hero-subtitle fade-in delay-1">Explore our innovative and collaborative software development projects.</p>
+        </div>
+    </div>
 
     <main>
-        <h1>Our Projects</h1>
-        <p>Explore the innovative projects developed by Project TEST. Click on the links below to learn more about each project:</p>
+        <section class="section fade-in">
+            <h1>Featured Projects</h1>
+            <p>Here are some of our most notable projects. These represent our commitment to innovation, quality, and community-driven development.</p>
+            
+            <div class="filters fade-in delay-1">
+                <button class="filter-button active" data-filter="all">All</button>
+                <button class="filter-button" data-filter="software">Software</button>
+                <button class="filter-button" data-filter="ai">AI & ML</button>
+                <button class="filter-button" data-filter="docs">Documentation</button>
+            </div>
+            
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <img src="images/PT_LOGO.png" alt="Virtual Cat Companion" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">Virtual Cat Companion</h3>
+                        <p class="project-description">A virtual pet project featuring an AI-powered cat companion that can learn, respond, and interact with users.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">AI</span>
+                            <span class="project-tag">GUI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/ProjectTEST-AI/Virtual-Cat-Companion" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> View on GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in delay-1">
+                    <img src="images/PT_LOGO.png" alt="MistralCat-1v" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">MistralCat-1v</h3>
+                        <p class="project-description">A fine-tuned language model based on Mistral 7B, trained on cat-themed conversations and knowledge.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">AI</span>
+                            <span class="project-tag">Mistral</span>
+                            <span class="project-tag">LLM</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://huggingface.co/TESTtm7873/MistralCat-1v" target="_blank" class="project-link">
+                                <i class="fas fa-brain"></i> View on HuggingFace
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in delay-2">
+                    <img src="images/PT_LOGO.png" alt="ChatCat Dataset" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">ChatCat Dataset</h3>
+                        <p class="project-description">A comprehensive dataset of cat-themed conversations, cat facts, and behaviors for training language models.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Dataset</span>
+                            <span class="project-tag">NLP</span>
+                            <span class="project-tag">AI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://huggingface.co/datasets/TESTtm7873/ChatCat" target="_blank" class="project-link">
+                                <i class="fas fa-database"></i> View Dataset
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card fade-in">
+                    <img src="images/PT_LOGO.png" alt="MPC Documentary" class="project-image">
+                    <div class="project-content">
+                        <h3 class="project-title">MPC Documentary</h3>
+                        <p class="project-description">A comprehensive documentation project detailing the history, development, and implementation of Model-Personification Curriculum.</p>
+                        <div class="project-tags">
+                            <span class="project-tag">Documentation</span>
+                            <span class="project-tag">Research</span>
+                            <span class="project-tag">AI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/ProjectTEST-AI/MPC-documentary" target="_blank" class="project-link">
+                                <i class="fas fa-book"></i> View Documentation
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         
-        <ul>
-            <li>
-                <a href="https://github.com/ProjectTEST-AI/Virtual-Cat-Companion" target="_blank">Virtual Cat Companion on GitHub</a>
-                <p>A digital friend for cat lovers. This project uses AI to simulate a cat's presence, offering companionship and interactive experiences.</p>
-            </li>
-            <li>
-                <a href="https://huggingface.co/TESTtm7873/MistralCat-1v" target="_blank">MistralCat-1v on Hugging Face</a>
-                <p>An advanced language model trained specifically to understand and generate cat-related content, making it a unique tool for cat enthusiasts and researchers.</p>
-            </li>
-            <li>
-                <a href="https://huggingface.co/datasets/TESTtm7873/ChatCat" target="_blank">ChatCat Dataset on Hugging Face</a>
-                <p>A comprehensive dataset designed for training AI to converse about, and as, cats. Ideal for developing chatbots and other interactive applications.</p>
-            </li>
-            <li>
-                <a href="https://github.com/ProjectTEST-AI/MPC-documentary" target="_blank">MPC Documentary on GitHub</a>
-                <p>This project aims to document the new language for Mindustry PC</p>
-            </li>
-        </ul>
-
-        <p>More news about our projects on our <a href="https://discord.com/invite/z6eCvSHuVY" target="_blank">Discord</a>!</p>
-    
+        <section class="section fade-in">
+            <h2>Get Involved</h2>
+            <p>Interested in contributing to Project TEST's open-source initiatives? Join our Discord community and get started today. We welcome contributors of all skill levels!</p>
+            
+            <a href="https://discord.com/invite/z6eCvSHuVY" target="_blank" class="project-link" style="font-size: 1.1rem; margin-top: 1rem; display: inline-block;">
+                <i class="fab fa-discord"></i> Join our Discord
+            </a>
+        </section>
     </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="index.html" class="footer-logo">Project<span>TEST</span></a>
+                    <p class="footer-text">Collaborative Software Development for the Future. Join our community today and be a part of something amazing.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/ProjectTEST-AI" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://discord.com/invite/z6eCvSHuVY" target="_blank" class="social-link">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                        <a href="https://x.com/ProjectTEST_AI" target="_blank" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h4>Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="projects.html"><i class="fas fa-code"></i> Projects</a></li>
+                        <li><a href="about.html"><i class="fas fa-info-circle"></i> About Us</a></li>
+                        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Projects</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://github.com/ProjectTEST-AI/Virtual-Cat-Companion"><i class="fas fa-cat"></i> Virtual Cat Companion</a></li>
+                        <li><a href="https://huggingface.co/TESTtm7873/MistralCat-1v"><i class="fas fa-brain"></i> MistralCat-1v</a></li>
+                        <li><a href="https://huggingface.co/datasets/TESTtm7873/ChatCat"><i class="fas fa-database"></i> ChatCat Dataset</a></li>
+                        <li><a href="https://github.com/ProjectTEST-AI/MPC-documentary"><i class="fas fa-book"></i> MPC Documentary</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <ul class="footer-links">
+                        <li><a href="mailto:project.test.pt@gmail.com"><i class="fas fa-envelope"></i> project.test.pt@gmail.com</a></li>
+                        <li><a href="https://discord.com/invite/z6eCvSHuVY"><i class="fab fa-discord"></i> Join our Discord</a></li>
+                        <li><a href="https://github.com/ProjectTEST-AI"><i class="fab fa-github"></i> GitHub</a></li>
+                        <li><a href="https://x.com/ProjectTEST_AI"><i class="fab fa-twitter"></i> Twitter/X</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Project TEST. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- External JS -->
+    <script>
+        // Simple project filtering
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-button');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Get filter value
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // For a real implementation, this would filter the projects
+                    console.log('Filter selected:', filterValue);
+                    
+                    // Animation effect when changing filters
+                    const projectCards = document.querySelectorAll('.project-card');
+                    projectCards.forEach(card => {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 300);
+                    });
+                });
+            });
+            
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('active');
+                });
+            }
+            
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('.header');
+                if (header) {
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                }
+            });
+            
+            // Scroll reveal animation
+            const revealElements = document.querySelectorAll('.fade-in');
+            function checkReveal() {
+                revealElements.forEach(el => {
+                    const elementTop = el.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    if (elementTop < windowHeight * 0.8) {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            window.addEventListener('scroll', checkReveal);
+            checkReveal(); // Initial check
+        });
+    </script>
 </body>
 
 </html>
