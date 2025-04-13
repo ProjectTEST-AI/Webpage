@@ -24,7 +24,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Projects - Project TEST</title>
-    <link rel="stylesheet" href="css/projects_styles.css" />
+    <link rel="stylesheet" href="css/projects_styles.css" /> <!-- Ensure this is the correct CSS -->
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -33,7 +33,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="dots-bg">
+    <div class="noise-overlay"></div>
+    <!-- Start: Replaced Header copied from about.html -->
     <header class="header" id="header">
         <div class="container">
             <div class="nav-container">
@@ -50,8 +52,10 @@
             </div>
         </div>
     </header>
+    <!-- End: Replaced Header -->
 
     <div class="hero">
+        <canvas id="nnCanvas"></canvas>
         <div class="hero-content">
             <h1 class="hero-title fade-in">Our Projects</h1>
             <p class="hero-subtitle fade-in delay-1">Explore our innovative and collaborative software development projects.</p>
@@ -202,83 +206,13 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Project TEST. All rights reserved.</p>
+                <p>&copy; 2025 Project TEST. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- External JS -->
-    <script>
-        // Simple project filtering
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterButtons = document.querySelectorAll('.filter-button');
-            
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove active class from all buttons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Add active class to clicked button
-                    this.classList.add('active');
-                    
-                    // Get filter value
-                    const filterValue = this.getAttribute('data-filter');
-                    
-                    // For a real implementation, this would filter the projects
-                    console.log('Filter selected:', filterValue);
-                    
-                    // Animation effect when changing filters
-                    const projectCards = document.querySelectorAll('.project-card');
-                    projectCards.forEach(card => {
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(20px)';
-                        
-                        setTimeout(() => {
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        }, 300);
-                    });
-                });
-            });
-            
-            // Mobile menu toggle
-            const menuToggle = document.getElementById('menuToggle');
-            const navMenu = document.getElementById('navMenu');
-            
-            if (menuToggle && navMenu) {
-                menuToggle.addEventListener('click', function() {
-                    navMenu.classList.toggle('active');
-                });
-            }
-            
-            // Header scroll effect
-            window.addEventListener('scroll', function() {
-                const header = document.querySelector('.header');
-                if (header) {
-                    if (window.scrollY > 50) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
-                }
-            });
-            
-            // Scroll reveal animation
-            const revealElements = document.querySelectorAll('.fade-in');
-            function checkReveal() {
-                revealElements.forEach(el => {
-                    const elementTop = el.getBoundingClientRect().top;
-                    const windowHeight = window.innerHeight;
-                    if (elementTop < windowHeight * 0.8) {
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateY(0)';
-                    }
-                });
-            }
-            window.addEventListener('scroll', checkReveal);
-            checkReveal(); // Initial check
-        });
-    </script>
+    <script src="js/dots.js"></script>
 </body>
 
 </html>

@@ -346,19 +346,90 @@ a:hover {
 /* Footer */
 .footer {
   background: var(--surface);
-  padding: 3rem 0 1rem;
-  text-align: center;
+  padding: 5rem 0 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 3rem;
 }
 
-.social-links {
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: inline-block;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.footer-logo span {
+  background: linear-gradient(90deg, var(--primary), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.footer-column h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  color: var(--text);
+}
+
+.footer-column h4::before {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--purple));
+  bottom: -10px;
+  left: 0;
+  border-radius: 3px;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+.footer .social-links {
   display: flex;
   gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
 }
 
-.social-link {
+.footer .social-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -371,13 +442,16 @@ a:hover {
   transition: all 0.3s ease;
 }
 
-.social-link:hover {
+.footer .social-link:hover {
   background: var(--primary);
   color: white;
   transform: translateY(-3px);
 }
 
-.copyright {
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
   color: var(--text-secondary);
   font-size: 0.9rem;
 }
@@ -437,11 +511,58 @@ a:hover {
     padding: 2rem;
     transition: right 0.3s ease;
     z-index: 1000;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
   }
   
   .nav-menu.active {
     right: 0;
     box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 1001;
+  }
+  
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background: var(--surface);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    transition: right 0.3s ease;
+    z-index: 999;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+  }
+  
+  /* This is the key style for showing the menu when active */
+  .nav-menu.active {
+    right: 0;
+  }
+  
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .nav-menu li a {
+    display: block;
+    padding: 1rem 0;
+    font-size: 1.2rem;
   }
 }
 

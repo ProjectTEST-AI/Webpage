@@ -290,7 +290,6 @@ a:hover {
   background: rgba(16, 162, 215, 0.1);
   border-color: var(--primary);
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(16, 162, 215, 0.2);
 }
 
 .contact-link-icon {
@@ -324,7 +323,119 @@ a:hover {
   background: var(--primary);
   color: white;
   transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(16, 162, 215, 0.2);
+}
+
+/* Footer styling to ensure consistency across all pages */
+.footer {
+  background: var(--surface);
+  padding: 5rem 0 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  margin-top: 3rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: inline-block;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.footer-logo span {
+  background: linear-gradient(90deg, var(--primary), var(--purple));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+}
+
+.footer-text {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.footer-column h4 {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  display: inline-block;
+  color: var(--text);
+}
+
+.footer-column h4::before {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), var(--purple));
+  bottom: -10px;
+  left: 0;
+  border-radius: 3px;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.footer-links a:hover {
+  color: var(--primary);
+}
+
+.footer .social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.footer .social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--surface-light);
+  color: var(--text);
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.footer .social-link:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-3px);
+}
+
+.footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
 }
 
 /* Animations */
@@ -353,6 +464,17 @@ a:hover {
   animation-delay: 0.4s;
 }
 
+/* Header & Navigation Styles */
+.menu-toggle {
+  display: none; /* Hide by default on larger screens */
+  background: transparent;
+  border: none;
+  color: var(--text); /* Use your theme's text color */
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1001; /* Ensure it's clickable when shown */
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   nav ul {
@@ -370,6 +492,42 @@ a:hover {
   
   h1 {
     font-size: 2rem;
+  }
+  
+  .menu-toggle {
+    display: block; /* Show only on smaller screens */
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background: var(--surface);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    transition: right 0.3s ease;
+    z-index: 999;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+  }
+  
+  .nav-menu.active {
+    right: 0;
+  }
+  
+  .nav-menu li {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .nav-menu li a {
+    display: block;
+    padding: 1rem 0;
+    font-size: 1.2rem;
   }
 }
 

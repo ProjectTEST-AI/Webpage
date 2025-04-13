@@ -17,53 +17,62 @@
 */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Mobile menu toggle
+    // Mobile menu toggle - Fixed to ensure reliable functionality
     const menuToggle = document.getElementById('menuToggle');
     const navMenu = document.getElementById('navMenu');
-  
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      menuToggle.innerHTML = navMenu.classList.contains('active') 
-        ? '<i class="fas fa-times"></i>' 
-        : '<i class="fas fa-bars"></i>';
-    });
-  
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains('active')) {
-        navMenu.classList.remove('active');
-        menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-      }
-    });
+    
+    if (menuToggle && navMenu) {
+        // Use a robust click handler for the toggle button
+        menuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Force toggle the active class
+            navMenu.classList.toggle('active');
+            
+            // Update icon based on menu state
+            if (navMenu.classList.contains('active')) {
+                menuToggle.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+      
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navMenu.contains(e.target) && !menuToggle.contains(e.target) && navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+    }
   
     // Header scroll effect
     const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    });
+    if (header) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    }
   
     // Initialize neural network canvas
     const hero = document.querySelector('.hero');
     const canvas = document.getElementById('nnCanvas');
+    
+    // Check if canvas exists - some pages might not have it
+    if (!canvas) return;
+    
     const ctx = canvas.getContext('2d');
   
-    // Set canvas size
-    function resizeCanvas() {
-      canvas.width = hero.offsetWidth;
-      canvas.height = hero.offsetHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-  
-    // Neural network parameters
+    // Neural network parameters - Declare these BEFORE the resizeCanvas function
     const neurons = [];
-    let neuronCount = calculateNeuronCount();
-    let connectionDistance = calculateConnectionDistance();
     const colors = ['#10A2D7', '#9C27B0', '#E91E63', '#4CAF50', '#03A9F4'];
+    let neuronCount = 0;
+    let connectionDistance = 0;
     
     // Calculate neuron count based on screen size
     function calculateNeuronCount() {
@@ -102,7 +111,38 @@ document.addEventListener('DOMContentLoaded', () => {
       
       return baseDistance;
     }
-  
+    
+    // Set canvas size
+    function resizeCanvas() {
+      // Save the current state of neurons before resizing
+      const savedNeurons = neurons.length > 0 ? [...neurons] : [];
+      
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
+      
+      // Restore saved neurons state if available
+      if (savedNeurons.length > 0) {
+        // Adjust positions for new canvas dimensions
+        const widthRatio = canvas.width / (savedNeurons[0].canvasWidth || canvas.width);
+        const heightRatio = canvas.height / (savedNeurons[0].canvasHeight || canvas.height);
+        
+        neurons.length = 0;
+        savedNeurons.forEach(neuron => {
+          neurons.push({
+            x: neuron.x * widthRatio,
+            y: neuron.y * heightRatio,
+            vx: neuron.vx,
+            vy: neuron.vy,
+            color: neuron.color,
+            active: neuron.active,
+            size: neuron.size,
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height
+          });
+        });
+      }
+    }
+    
     // Initialize neurons
     function createNeurons() {
       neurons.length = 0;
@@ -118,7 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
           vy: (Math.random() - 0.5) * 0.5,
           color: colors[Math.floor(Math.random() * colors.length)],
           active: Math.random() > 0.7,
-          size: Math.random() * 1.5 + 1
+          size: Math.random() * 1.5 + 1,
+          canvasWidth: canvas.width,
+          canvasHeight: canvas.height
         });
       }
     }
@@ -185,6 +227,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     
+    // Initialize canvas
+    resizeCanvas();
+    
     // Handle window resize to adjust neuron count and distribution
     window.addEventListener('resize', () => {
       resizeCanvas();
@@ -197,6 +242,8 @@ document.addEventListener('DOMContentLoaded', () => {
       drawNetwork();
       requestAnimationFrame(animate);
     }
+    
+    // Start the animation
     createNeurons();
     animate();
   
